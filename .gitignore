@@ -5,3 +5,4 @@ a.out
 *.swp
 Cargo.lock
 target
+core/

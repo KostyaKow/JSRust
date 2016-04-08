@@ -4,16 +4,16 @@
 //https://github.com/rust-lang/rust/tree/master/src/librustc_back/target
 //--target=i686_unknown_linux_gnu --target=asmjs_unknown_emscripten
 //rustc --target=i686_unknown_linux_gnu --emit=llvm-ir hello.rs
-
+#![feature(intrinsics)]
 #![feature(macro_rules)]
 #![feature(lang_items)]
 #![feature(start)]
 
 #![feature(no_core)]
 #![no_std]
-#![no_core]
-#![feature(intrinsics)]
-
+//#![no_core]
+use core::container::Container;
+mod core;
 
 #[link(name = "test")]
 extern {
