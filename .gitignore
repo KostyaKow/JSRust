@@ -1,0 +1,7 @@
+*.ll
+*.bc
+a.out
+*.js
+*.swp
+Cargo.lock
+target
