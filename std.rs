@@ -12,6 +12,7 @@
 #![feature(no_core)]
 #![no_std]
 #![no_core]
+#![feature(intrinsics)]
 
 
 //use core::container::Container;
@@ -24,7 +25,10 @@ extern {
    fn c_int_lt(a : u32, b : u32) -> bool;
    fn c_int_gt(a : u32, b : u32) -> bool;
    fn c_int_eq(a : u32, b : u32) -> bool;
+   //fn c_printf(s : *const u8);
+   fn c_print_ln(s : *const u8);
 
+   //fn c_to_ptr(a : u64) ->
 }
 
 #[lang="sized"]
@@ -48,6 +52,14 @@ fn u32_lt(a : u32, b : u32) -> bool {
    unsafe { c_int_lt(a, b) }
 }
 
+
+extern "rust-intrinsic" {
+   fn transmute<T, U>(x: T) -> U;
+   fn offset<T>(dst: *const T, offset: isize) -> *const T;
+}
+fn print_ln(src: &str) {
+   unsafe { c_print_ln(transmute::<&&str, *const u8>(&src) as *const u8); }
+}
 
 /*pub mod std {
    pub mod ops {
@@ -82,6 +94,9 @@ fn start(argc: isize, argv: *const *const u8) -> isize {
       i = u32_add(i, 1);
       putchar(u32_to_c(i));
    }
+   print_ln("");
+
+   print_ln("hello world");
    0
 }
 

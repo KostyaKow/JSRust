@@ -10,6 +10,7 @@ char c_int_lt(int a, int b) { return a < b; }
 char c_int_gt(int a, int b) { return a > b; }
 char c_int_eq(int a, int b) { return a == b; }
 
+void c_print_ln(char** s) { printf("%s\n", *s); }
 
 //printf("Hello world! %c", c);
 
