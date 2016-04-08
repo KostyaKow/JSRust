@@ -32,7 +32,18 @@ trait Sized {}
 
 #[start]
 fn start(argc: isize, argv: *const *const u8) -> isize {
-    0
+   let mut i : u32 = 0;
+   while (i < 1000000) {
+      i=i+1;
+      let mut j : u32 = 0;
+      while (j < 1000000) {
+         j=j+1;
+         let mut z : u32 = 0;
+         while z < 1000000 {
+            z=z+1;
+         }
+      }
+   }
 }
 
 
