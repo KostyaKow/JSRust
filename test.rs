@@ -20,11 +20,15 @@
 #![feature(lang_items)]
 //use core::container::Container;
 
-// https://github.com/thestinger/rust-core
-//mod core;
+
+#[link(name = "test")]
+extern {
+   fn test(input: *const u8) -> u32;
+}
 
 #[lang="sized"]
 trait Sized {}
+
 
 #[start]
 fn start(argc: isize, argv: *const *const u8) -> isize {

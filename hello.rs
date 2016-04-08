@@ -1,3 +1,5 @@
+//https://gist.github.com/klutzy/7819231
+
 // emscripten uses le32-unknown-nacl triple but rustc doesn't know it now.
 // So just use similar target instead.
 // `rustc hello.rs --target=i686-unknown-linux --emit-llvm -S --cfg libc`
