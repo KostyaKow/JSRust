@@ -15,7 +15,6 @@
 #![feature(intrinsics)]
 
 
-//use core::container::Container;
 #[link(name = "test")]
 extern {
    //fn test(input: *const u8) -> u32;
@@ -27,8 +26,13 @@ extern {
    fn c_int_eq(a : u32, b : u32) -> bool;
    //fn c_printf(s : *const u8);
    fn c_print_ln(s : *const u8);
-
+   fn c_panic(s : *const u8);
    //fn c_to_ptr(a : u64) ->
+}
+
+extern "rust-intrinsic" {
+   fn transmute<T, U>(x: T) -> U;
+   fn offset<T>(dst: *const T, offset: isize) -> *const T;
 }
 
 #[lang="sized"]
@@ -37,10 +41,30 @@ trait Sized {}
 #[lang="copy"]
 trait Copy {}
 
+#[lang="panic"]
+pub fn panic(expr_file_line: &(&'static str, &'static str, u32)) {
+   //unsafe { c_panic(transmute::<&&str, *const u8>(&expr_file_line) as *const u8); }
+}
+
+#[lang="add"]
+trait Add<RHS = Self> {
+   type Output;
+   fn add(self, rhs: RHS) -> Self::Output;
+}
+impl Add for u32 {
+   type Output = u32;
+   fn add(self, _rhs: u32) -> u32 {
+      u32_add(self, _rhs)
+   }
+}
+
+
+fn print_ln(src: &str) {
+   unsafe { c_print_ln(transmute::<&&str, *const u8>(&src) as *const u8); }
+}
 fn putchar(c : char)  {
    unsafe { c_putchar(c); }
 }
-
 fn u32_add(a : u32, b : u32) -> u32 {
    unsafe { c_add_ints(a, b) }
 }
@@ -52,30 +76,6 @@ fn u32_lt(a : u32, b : u32) -> bool {
    unsafe { c_int_lt(a, b) }
 }
 
-
-extern "rust-intrinsic" {
-   fn transmute<T, U>(x: T) -> U;
-   fn offset<T>(dst: *const T, offset: isize) -> *const T;
-}
-fn print_ln(src: &str) {
-   unsafe { c_print_ln(transmute::<&&str, *const u8>(&src) as *const u8); }
-}
-
-/*pub mod std {
-   pub mod ops {
-      pub trait Add<RHS = Self> {
-         type Output;
-
-         fn add(self, rhs: RHS) -> Self::Output;
-      }
-      pub impl Add for u32 {
-         type Output = u32;
-         fn add(self, _rhs: u32) -> u32 {
-            ::add_ints(self, _rhs)
-         }
-      }
-   }
-}*/
 
 /*use std::ops::Add;
 
@@ -91,10 +91,9 @@ fn start(argc: isize, argv: *const *const u8) -> isize {
    let mut i : u32 = 0;
    let max : u32 = 100;
    while u32_lt(i, max) {
-      i = u32_add(i, 1);
+      i = i + 1;
       putchar(u32_to_c(i));
    }
-   print_ln("");
 
    print_ln("hello world");
    0
