@@ -2,13 +2,18 @@
 default: test
 
 test:
-	make clean; make stdtest; node test.js.test
+	make clean; make js; node test.js.test
 
-stdtest: stdrustlib
-	emcc rust_std.c core.ll std.ll -o hello.js
+#emcc rust_std.c core.ll main.ll -o hello.js
+js: main
+	emcc rust_std.c main.ll -o hello.js
 
-stdrustlib:
-	rustc --target=i686_unknown_linux_gnu --emit=llvm-ir std.rs
+#rustc --crate-name list --crate-type lib list.rs
+#rustc --crate-name utils --crate-type lib utils.rs
+#rustc -L . lisp.rs
+
+main:
+	rustc --target=i686_unknown_linux_gnu --emit=llvm-ir main.rs
 
 clean:
 	rm -f *.ll *.js

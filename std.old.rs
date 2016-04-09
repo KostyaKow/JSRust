@@ -11,9 +11,11 @@
 
 #![feature(no_core)]
 #![no_std]
-//#![no_core]
+#![no_core]
+
+
 use core::container::Container;
-mod core;
+//mod core;
 
 #[link(name = "test")]
 extern {
