@@ -6,3 +6,4 @@ a.out
 Cargo.lock
 target
 core/
+libstd

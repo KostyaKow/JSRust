@@ -273,6 +273,34 @@
 #![feature(zero_one)]
 #![feature(question_mark)]
 
+//kk add
+#![no_core]
+#![deny(missing_docs)]
+#![deny(missing_debug_implementations)]
+#![cfg_attr(not(stage0), deny(warnings))]
+
+#![feature(allow_internal_unstable)]
+#![feature(associated_type_defaults)]
+#![feature(concat_idents)]
+#![feature(const_fn)]
+#![feature(custom_attribute)]
+#![feature(fundamental)]
+#![feature(inclusive_range_syntax)]
+#![feature(intrinsics)]
+#![feature(lang_items)]
+#![feature(no_core)]
+#![feature(on_unimplemented)]
+#![feature(optin_builtin_traits)]
+#![feature(reflect)]
+#![feature(unwind_attributes)]
+#![feature(repr_simd, platform_intrinsics)]
+#![feature(rustc_attrs)]
+#![feature(specialization)]
+#![feature(staged_api)]
+#![feature(unboxed_closures)]
+#![feature(question_mark)]
+//kk end
+
 // Issue# 30592: Systematically use alloc_system during stage0 since jemalloc
 // might be unavailable or disabled
 #![cfg_attr(stage0, feature(alloc_system))]
@@ -286,16 +314,19 @@
 
 #[cfg(test)] extern crate test;
 
+
 // We want to reexport a few macros from core but libcore has already been
 // imported by the compiler (via our #[no_std] attribute) In this case we just
 // add a new crate name so we can attach the reexports to it.
 #[macro_reexport(assert, assert_eq, debug_assert, debug_assert_eq,
                  unreachable, unimplemented, write, writeln, try)]
-extern crate core as __core;
+//extern crate core as __core; //kk comment
+mod core;
 
 #[macro_use]
 #[macro_reexport(vec, format)]
-extern crate collections as core_collections;
+//extern crate collections as core_collections;
+mod core_collections;
 
 #[allow(deprecated)] extern crate rand as core_rand;
 extern crate alloc;
